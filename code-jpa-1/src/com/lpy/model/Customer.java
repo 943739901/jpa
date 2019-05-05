@@ -4,23 +4,18 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+@NamedQuery(name="testNamedQuery", query="FROM Customer c WHERE c.id = ?")
 @Getter
 @Setter
-@ToString
+@NoArgsConstructor
 @Entity
 @Table(name = "JPA_CUTOMERS")
 public class Customer {
@@ -39,7 +34,13 @@ public class Customer {
     @Temporal(TemporalType.DATE)
     private Date birth;
 
-    @OneToMany(mappedBy = "customer")
-    @JoinColumn(name = "id")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
+//    @JoinColumn(name = "customer_id")
     private Set<Order> orders = new HashSet<>();
+
+    public Customer(String lastName, int age) {
+        super();
+        this.lastName = lastName;
+        this.age = age;
+    }
 }
